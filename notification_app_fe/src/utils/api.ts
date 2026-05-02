@@ -1,5 +1,4 @@
-const BASE = "http://20.207.122.201/evaluation-service"
-const TOKEN = process.env.REACT_APP_ACCESS_TOKEN || ""
+const BASE = "http://localhost:3001/api"
 
 export interface Notif {
   ID: string
@@ -14,9 +13,7 @@ export async function getNotifs(params?: { limit?: number; page?: number; notifi
   if (params?.page) link.searchParams.set("page", String(params.page))
   if (params?.notification_type) link.searchParams.set("notification_type", params.notification_type)
 
-  let res = await fetch(link.toString(), {
-    headers: TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {},
-  })
+  let res = await fetch(link.toString())
   if (!res.ok) throw new Error(`err ${res.status}`)
   let data = await res.json()
   return (data.notifications || []) as Notif[]
