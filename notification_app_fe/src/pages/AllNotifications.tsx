@@ -3,9 +3,8 @@ import {
   Container, Typography, Card, CardContent, Chip, Box,
   CircularProgress, Alert, Pagination, FormControl,
   InputLabel, Select, MenuItem, SelectChangeEvent,
-  AppBar, Toolbar, Badge, IconButton
+  AppBar, Toolbar
 } from "@mui/material"
-import NotificationsIcon from "@mui/icons-material/Notifications"
 import { useNavigate } from "react-router-dom"
 import { getNotifs, Notif } from "../utils/api"
 import { Log } from "../utils/log"
@@ -21,12 +20,6 @@ function markSeen(ids: string[]) {
   let seen = getSeen()
   ids.forEach(id => seen.add(id))
   localStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(seen)))
-}
-
-const colors: Record<string, "primary" | "secondary" | "success"> = {
-  Placement: "primary",
-  Result: "secondary",
-  Event: "success",
 }
 
 export default function AllPage() {
@@ -65,27 +58,33 @@ export default function AllPage() {
 
   return (
     <>
-      <AppBar position="static" sx={{ mb: 3, background: "linear-gradient(135deg, #1a237e, #0d47a1)" }}>
-        <Toolbar>
-          <NotificationsIcon sx={{ mr: 1 }} />
-          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
+      <AppBar position="static" elevation={0} sx={{ mb: 4, background: "#111827", borderBottom: "1px solid #1f2937" }}>
+        <Toolbar sx={{ minHeight: 72, px: { xs: 2, sm: 3 } }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 650 }}>
             Campus Notifications
           </Typography>
-          <Chip label="All" color="primary" sx={{ mr: 1, color: "#fff", fontWeight: 600 }} />
+          <Chip label="All" sx={{ mr: 1, color: "#111827", bgcolor: "#f9fafb", fontWeight: 600, borderRadius: "6px" }} />
           <Chip label="Priority" variant="outlined"
-            sx={{ color: "#fff", borderColor: "#fff", cursor: "pointer" }}
+            sx={{ color: "#f9fafb", borderColor: "#9ca3af", cursor: "pointer", borderRadius: "6px", "&:hover": { bgcolor: "#1f2937" } }}
             onClick={() => nav("/priority")} />
           {newCount > 0 && (
-            <Badge badgeContent={newCount} color="error" sx={{ ml: 2 }}>
-              <IconButton color="inherit" size="small"><NotificationsIcon /></IconButton>
-            </Badge>
+            <Chip label={`${newCount} New`} sx={{ ml: 1, color: "#111827", bgcolor: "#e5e7eb", fontWeight: 600, borderRadius: "6px" }} />
           )}
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="md">
-        <Box sx={{ mb: 3 }}>
-          <FormControl size="small" sx={{ minWidth: 180 }}>
+      <Container maxWidth="lg" sx={{ pb: 4 }}>
+        <Box sx={{ mb: 3, display: "flex", alignItems: "center" }}>
+          <FormControl size="small" sx={{
+            minWidth: 220,
+            bgcolor: "#fff",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "6px",
+              "& fieldset": { borderColor: "#d1d5db" },
+              "&:hover fieldset": { borderColor: "#9ca3af" },
+              "&.Mui-focused fieldset": { borderColor: "#374151", borderWidth: 1 },
+            },
+          }}>
             <InputLabel>Filter by Type</InputLabel>
             <Select value={filter} label="Filter by Type"
               onChange={(e: SelectChangeEvent) => {
@@ -101,7 +100,7 @@ export default function AllPage() {
           </FormControl>
         </Box>
 
-        {loading && <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}><CircularProgress /></Box>}
+        {loading && <Box sx={{ display: "flex", justifyContent: "center", py: 6 }}><CircularProgress sx={{ color: "#374151" }} /></Box>}
         {err && <Alert severity="error" sx={{ mb: 2 }}>{err}</Alert>}
 
         {!loading && notifs.map(n => {
@@ -109,20 +108,19 @@ export default function AllPage() {
           return (
             <Card key={n.ID} sx={{
               mb: 2,
-              borderLeft: isNew ? "4px solid #f44336" : "4px solid transparent",
-              background: isNew ? "linear-gradient(90deg, #fff3e0, #fff 20%)" : "#fff",
-              transition: "all 0.3s",
-              "&:hover": { transform: "translateY(-2px)", boxShadow: 4 },
+              border: "1px solid #e5e7eb",
+              bgcolor: "#fff",
+              boxShadow: "0 1px 2px rgba(17, 24, 39, 0.04)",
             }}>
-              <CardContent sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <CardContent sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2, px: 3, py: 2.5, "&:last-child": { pb: 2.5 } }}>
                 <Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 0.5 }}>
-                    <Chip label={n.Type} size="small" color={colors[n.Type] || "default"} />
-                    {isNew && <Chip label="NEW" size="small" color="error" variant="outlined" />}
+                    <Chip label={n.Type} size="small" sx={{ bgcolor: "#f3f4f6", color: "#374151", border: "1px solid #d1d5db", fontWeight: 600, borderRadius: "5px" }} />
+                    {isNew && <Chip label="New" size="small" variant="outlined" sx={{ borderColor: "#9ca3af", color: "#374151", borderRadius: "5px" }} />}
                   </Box>
-                  <Typography variant="body1" sx={{ fontWeight: 600, mt: 0.5 }}>{n.Message}</Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 650, mt: 0.5 }}>{n.Message}</Typography>
                 </Box>
-                <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: "nowrap", ml: 2 }}>
+                <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: "nowrap", ml: 2, fontSize: 13 }}>
                   {new Date(n.Timestamp).toLocaleString()}
                 </Typography>
               </CardContent>

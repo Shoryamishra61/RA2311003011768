@@ -7,12 +7,18 @@ import { Log } from "./utils/log"
 
 const theme = createTheme({
   palette: {
-    primary: { main: "#1a237e" },
-    secondary: { main: "#7b1fa2" },
-    background: { default: "#f5f5f5" },
+    primary: { main: "#111827" },
+    secondary: { main: "#374151" },
+    background: { default: "#f7f7f8" },
+    text: { primary: "#111827", secondary: "#4b5563" },
   },
-  typography: { fontFamily: "'Inter', sans-serif" },
-  shape: { borderRadius: 8 },
+  typography: {
+    fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    h6: { fontWeight: 650, letterSpacing: 0 },
+    body1: { letterSpacing: 0 },
+    body2: { letterSpacing: 0 },
+  },
+  shape: { borderRadius: 6 },
 })
 
 function App() {
