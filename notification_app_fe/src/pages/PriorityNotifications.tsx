@@ -43,9 +43,9 @@ const TYPE_COLORS: Record<string, "primary" | "secondary" | "success"> = {
 };
 
 const WEIGHT_LABELS: Record<string, string> = {
-  Placement: "⭐⭐⭐ High",
-  Result: "⭐⭐ Medium",
-  Event: "⭐ Low",
+  Placement: "High",
+  Result: "Medium",
+  Event: "Low",
 };
 
 export default function PriorityNotifications() {
@@ -69,7 +69,6 @@ export default function PriorityNotifications() {
       const sliced = sorted.slice(0, topN);
       setNotifications(sliced);
 
-      // mark viewed
       const ids = sliced.map((n) => n.ID);
       markViewed(ids);
       setViewed(getViewed());
