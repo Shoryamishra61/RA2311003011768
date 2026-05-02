@@ -117,9 +117,9 @@ export default function PriorityNotifications() {
             </Typography>
             <Slider
               value={topN}
-              min={5}
-              max={50}
-              step={5}
+              min={1}
+              max={20}
+              step={1}
               onChange={(_, v) => {
                 setTopN(v as number);
                 Log("frontend", "info", "component", `topN set to ${v}`);
